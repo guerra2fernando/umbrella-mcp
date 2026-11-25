@@ -1,18 +1,13 @@
 # Umbrella Agent Tools
 
-Zero-setup on-demand data for autonomous agents. No API key, no signup, no vendor lock-in.
+`GET /paid` returns the Base token price in USD, liquidity in USD, 24h volume in USD, and 24h price change %, sourced live from DexScreener.
 
-## Token Intel (x402, USDC on Base)
+**Paid endpoint:** `GET https://umbrella-agent-pay.lengrowth.workers.dev/paid?token=0x4200000000000000000000000000000000000006` — responds HTTP 402; pay 0.01 USDC on Base to `0x6bf8ac13aaf4c928b75998cf06ce256e59936400`, then re-request with `&tx=<hash>`.
 
-`GET https://umbrella-agent-pay.lengrowth.workers.dev/paid`
+```bash
+curl -i "https://umbrella-agent-pay.lengrowth.workers.dev/paid?token=0x4200000000000000000000000000000000000006"
+# -> HTTP 402 + payment details; pay 0.01 USDC on Base to 0x6bf8ac13aaf4c928b75998cf06ce256e59936400
+# re-request with &tx=<hash> to receive the JSON
+```
 
-Returns a snapshot of a Base token: price, liquidity, 24h volume, 24h change. Cost: **0.01 USDC** on Base. Payment is verified on-chain; the data is released only when the USDC transfer to the payTo address is confirmed.
-
-- **payTo:** `0x6bf8ac13aaf4c928b75998cf06ce256e59936400`
-- **Network:** Base mainnet (eip155:8453)
-- **Asset:** USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`)
-- **Price:** 10000 units (0.01 USDC)
-
-Call without `?tx=` to receive the x402 challenge. Pay, then re-call with `?tx=<txhash>` to receive the data.
-
-Listed on agent-tools.cloud.
+**Why:** no account, no API key, no vendor lock-in, and it costs no LLM inference.
